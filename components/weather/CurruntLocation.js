@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Image from "next/image";
 import locationSvg from "@/public/svgs/location.svg";
@@ -9,9 +9,11 @@ export default function CurruntLocation() {
     return (
         <div className="flex justify-between items-center gap-0.5">
             <div>
-                <Image src={locationSvg} alt="location" className="w-5" />
+                <Image src={locationSvg} alt="location" className="w-5 opacity-60" />
             </div>
-            <div>{selectedCity.name}</div>
+            <div className="text-zinc-500 text-lg font-semibold">
+                {selectedCity.name} 
+            </div>
         </div>
     );
 }

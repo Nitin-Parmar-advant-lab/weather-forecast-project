@@ -3,6 +3,7 @@
 import { useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { weatherAction, fetchWeather } from "@/store/weatherSlice";
+import { convertWeatherForecast } from "@/lib/weatherUtils";
 
 export default function useData() {
     const dispatch = useDispatch();
@@ -22,6 +23,21 @@ export default function useData() {
         refreshWeather();
     }, [refreshWeather]);
 
+    // Load favorites from localStorage
+    useEffect(() => {
+        const savedFavorites = localStorage.getItem("weather_favorites");
+        if (savedFavorites) {
+            dispatch(weatherAction.setFavorites(JSON.parse(savedFavorites)));
+        }
+    }, [dispatch]);
+
+    // Save favorites to localStorage
+    useEffect(() => {
+        if (favorites.length > 0 || localStorage.getItem("weather_favorites")) {
+            localStorage.setItem("weather_favorites", JSON.stringify(favorites));
+        }
+    }, [favorites]);
+
     const updateCity = (cityData) => {
         dispatch(weatherAction.setCity(cityData));
     };
@@ -39,8 +55,10 @@ export default function useData() {
         }
     };
 
+    const convertedForecast = convertWeatherForecast(forecast, unit);
+
     return {
-        weatherData: forecast,
+        weatherData: convertedForecast,
         selectedCity,
         isLoading: status === "loading",
         error,

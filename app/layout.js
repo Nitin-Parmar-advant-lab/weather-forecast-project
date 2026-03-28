@@ -1,4 +1,3 @@
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import StoreProvider from "../store/StoreProvider";
 
@@ -9,8 +8,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
     return (
-        <html lang="en">
-            <body className="h-full mx-20 my-10">
+        <html lang="en" suppressHydrationWarning className="h-full">
+            <body className="h-full p-10 bg-zinc-300/10 overflow-hidden">
                 <StoreProvider>{children}</StoreProvider>
             </body>
         </html>

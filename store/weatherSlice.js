@@ -6,7 +6,7 @@ import { formatDailyData, formatHourlyData } from "../lib/weatherUtils";
 export const fetchWeather = createAsyncThunk(
     "weather/fetchWeather",
     async ({ lat, lon }) => {
-        const response = await fetch(`/api/weather?lat=${lat}&lon=${lon}`);
+        const response = await fetch(`/api/weather?lat=${lat}&lon=${lon}&unit=c`);
         if (!response.ok) {
             throw new Error("Failed to fetch weather data");
         }
@@ -17,7 +17,11 @@ export const fetchWeather = createAsyncThunk(
             current: data.current,
             hourly: formatHourlyData(data.hourly),
             daily: formatDailyData(data.daily),
-            units: data.current_units,
+            units: {
+                ...data.current_units,
+                ...data.hourly_units,
+                ...data.daily_units,
+            },
         };
     },
 );
@@ -52,6 +56,9 @@ const weatherSlice = createSlice({
             state.favorites = state.favorites.filter(
                 (city) => city.name !== action.payload.name,
             );
+        },
+        setFavorites: (state, action) => {
+            state.favorites = action.payload;
         },
     },
     extraReducers: (builder) => {
