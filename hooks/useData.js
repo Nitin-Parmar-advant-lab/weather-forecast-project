@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { weatherAction, fetchWeather } from "@/store/weatherSlice";
 import { convertWeatherForecast } from "@/lib/weatherUtils";
@@ -19,25 +19,6 @@ export default function useData() {
         }
     }, [dispatch, selectedCity]);
 
-    useEffect(() => {
-        refreshWeather();
-    }, [refreshWeather]);
-
-    // Load favorites from localStorage
-    useEffect(() => {
-        const savedFavorites = localStorage.getItem("weather_favorites");
-        if (savedFavorites) {
-            dispatch(weatherAction.setFavorites(JSON.parse(savedFavorites)));
-        }
-    }, [dispatch]);
-
-    // Save favorites to localStorage
-    useEffect(() => {
-        if (favorites.length > 0 || localStorage.getItem("weather_favorites")) {
-            localStorage.setItem("weather_favorites", JSON.stringify(favorites));
-        }
-    }, [favorites]);
-
     const updateCity = (cityData) => {
         dispatch(weatherAction.setCity(cityData));
     };
@@ -55,7 +36,9 @@ export default function useData() {
         }
     };
 
-    const convertedForecast = convertWeatherForecast(forecast, unit);
+    const convertedForecast = useMemo(() => {
+        return convertWeatherForecast(forecast, unit);
+    }, [forecast, unit]);
 
     return {
         weatherData: convertedForecast,

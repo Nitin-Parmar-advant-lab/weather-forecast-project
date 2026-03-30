@@ -16,7 +16,9 @@ export async function GET(request) {
         const unitParam = searchParams.get("unit") === "f" ? "fahrenheit" : "celsius";
         const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,weather_code,wind_speed_10m,surface_pressure&hourly=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=auto&temperature_unit=${unitParam}`;
 
-        const res = await fetch(url);
+        const res = await fetch(url, {
+            next: { revalidate: 300 },
+        });
 
         if (!res.ok) {
             throw new Error(`Failed to fetch weather data: ${res.status}`);

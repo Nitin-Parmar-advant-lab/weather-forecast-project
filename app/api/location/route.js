@@ -16,7 +16,9 @@ export async function GET(request) {
     try {
         const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q)}&count=5&language=en&format=json`;
 
-        const res = await fetch(url);
+        const res = await fetch(url, {
+            next: { revalidate: 86400 }, 
+        });
 
         if (!res.ok) {
             throw new Error(`Failed to fetch from Open-Meteo: ${res.status}`);

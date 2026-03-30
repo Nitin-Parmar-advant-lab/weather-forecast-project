@@ -28,17 +28,17 @@ export default function Search() {
     }
 
     return (
-        <div className="relative group flex flex-col items-center">
-            <div className="flex justify-between items-center border border-gray-400 gap-2 rounded-full px-2 py-1.5 focus-within:ring-1 bg-white/50 backdrop-blur-sm shadow-sm transition-all duration-300">
+        <div className="relative group flex flex-col items-center w-full max-w-sm mx-auto sm:max-w-none">
+            <div className="flex justify-between items-center border border-white/10 gap-2 rounded-full px-5 py-2.5 focus-within:border-indigo-500/50 focus-within:ring-2 focus-within:ring-indigo-500/20 bg-black/20 focus-within:bg-black/40 backdrop-blur-3xl shadow-inner transition-all duration-500 w-full sm:w-64">
                 <Image
                     src={searchSvg}
                     alt="search"
-                    className="w-5 opacity-50"
+                    className="w-4 opacity-40 shrink-0 invert"
                 />
                 <input
                     type="text"
                     placeholder="Search city"
-                    className="outline-none text-sm bg-transparent w-48 text-zinc-800"
+                    className="outline-none text-sm bg-transparent w-full text-white placeholder:text-white/30 font-medium"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
                     onKeyDown={handleSearch}
