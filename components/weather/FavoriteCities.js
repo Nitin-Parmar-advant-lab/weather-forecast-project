@@ -1,27 +1,19 @@
-import { useState } from "react";
-import useData from "@/hooks/useData";
-import { searchLocation } from "@/lib/actions";
 import closeIcon from "@/public/svgs/close.svg";
 import Image from "next/image";
+import useFavoriteCities from "@/hooks/useFavoriteCities";
 
 export default function FavoriteCities() {
-    const { favorites, updateCity, toggleFavorite } = useData();
-    const [isAdding, setIsAdding] = useState(false);
-    const [query, setQuery] = useState("");
-    const [error, setError] = useState("");
-
-    const handleAddCity = (e) => {
-        if (e.key === "Enter") {
-            if (query.trim()) {
-                toggleFavorite({
-                    name: query.trim(),
-                });
-                setQuery("");
-                setIsAdding(false);
-                setError("");
-            }
-        }
-    };
+    const {
+        favorites,
+        toggleFavorite,
+        isAdding,
+        setIsAdding,
+        query,
+        setQuery,
+        error,
+        handleAddCity,
+        handleSelectCity,
+    } = useFavoriteCities();
 
     return (
         <div className="p-4 sm:p-6 rounded-4xl border border-white/5 bg-black/20 backdrop-blur-3xl shadow-2xl flex flex-col transition-all duration-500">
@@ -33,9 +25,11 @@ export default function FavoriteCities() {
                 </div>
                 <button
                     onClick={() => setIsAdding(!isAdding)}
-                    className={`w-7 h-7 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-500 border border-white/10 ${isAdding ? "bg-rose-500/20 border-rose-400 rotate-45" : "bg-white/5 hover:bg-white/10 hover:border-white/20 hover:scale-110"}`}
+                    className="w-7 h-7 sm:w-10 sm:h-10 rounded-full flex items-center justify-center bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-colors"
                 >
-                    <span className="text-white text-lg sm:text-xl font-thin">+</span>
+                    <span className="text-white text-lg sm:text-xl font-thin">
+                        {isAdding ? "−" : "+"}
+                    </span>
                 </button>
             </div>
 
@@ -44,7 +38,7 @@ export default function FavoriteCities() {
                     <input
                         autoFocus
                         type="text"
-                        placeholder="Search city to save..."
+                        placeholder="Type city and press Enter..."
                         className="w-full bg-white/5 border border-white/10 rounded-2xl px-5 py-3 text-white placeholder:text-white/20 outline-none focus:ring-2 focus:ring-indigo-500/50 transition-all text-sm shadow-inner"
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
@@ -68,25 +62,7 @@ export default function FavoriteCities() {
                     favorites.map((city) => (
                         <div
                             key={city.name}
-                            onClick={async () => {
-                                if (city.lat && city.lon) {
-                                    updateCity(city);
-                                    setError("");
-                                } else {
-                                    const result = await searchLocation(city.name);
-                                    if (result) {
-                                        updateCity({
-                                            name: result.name,
-                                            lat: result.latitude,
-                                            lon: result.longitude,
-                                            country: result.country,
-                                        });
-                                        setError("");
-                                    } else {
-                                        setError("City not found");
-                                    }
-                                }
-                            }}
+                            onClick={() => handleSelectCity(city)}
                             className="flex justify-between items-center p-2 sm:p-2 bg-white/5 hover:bg-white/10 rounded-2xl transition-all duration-500 cursor-pointer border border-white/5 hover:border-indigo-500/30 group relative overflow-hidden shadow-lg active:scale-95"
                         >
                             <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/5 blur-3xl -z-10 group-hover:bg-indigo-500/10 transition-colors" />
@@ -95,7 +71,7 @@ export default function FavoriteCities() {
                                     {city.name}
                                 </span>
                                 <span className="text-[9px] sm:text-[10px] text-white/30 font-black tracking-[0.2em] uppercase mt-1">
-                                    {city.country}
+                                    {city.country || "Custom"}
                                 </span>
                             </div>
                             <button

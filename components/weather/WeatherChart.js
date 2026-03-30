@@ -60,7 +60,7 @@ export default function WeatherChart() {
     });
 
     return (
-        <div className="group relative overflow-hidden bg-black/20 backdrop-blur-3xl border border-white/5 rounded-[2rem] p-6 transition-all duration-500 hover:border-white/10 h-full flex flex-col shadow-2xl">
+        <div className="group relative overflow-hidden bg-black/20 backdrop-blur-3xl border border-white/5 rounded-4xl p-6 transition-all duration-500 hover:border-white/10 h-full flex flex-col shadow-2xl">
             <div className="flex items-center justify-between mb-8 shrink-0">
                 <div>
                     <h2 className="text-[10px] sm:text-xs font-black text-white/40 tracking-[0.2em] uppercase flex items-center gap-3">
@@ -70,11 +70,9 @@ export default function WeatherChart() {
                 </div>
             </div>
 
-            <div className="flex-1 min-h-0 w-full mt-2">
-                <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart
-                        data={chartData}
-                    >
+            <div className="flex-1 min-h-[180px] w-full mt-2">
+                <ResponsiveContainer width="100%" height="100%" minHeight={180}>
+                    <AreaChart data={chartData} margin={{ bottom: 15 }}>
                         <defs>
                             <linearGradient
                                 id="colorTemp"
@@ -124,9 +122,12 @@ export default function WeatherChart() {
                             tickFormatter={(value) => `${value}°`}
                             width={35}
                         />
-                        <Tooltip 
-                            content={<CustomTooltip unit={unit} />} 
-                            cursor={{ stroke: 'rgba(99, 102, 241, 0.2)', strokeWidth: 2 }}
+                        <Tooltip
+                            content={<CustomTooltip unit={unit} />}
+                            cursor={{
+                                stroke: "rgba(99, 102, 241, 0.2)",
+                                strokeWidth: 2,
+                            }}
                         />
                         <Area
                             type="monotone"

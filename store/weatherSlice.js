@@ -29,8 +29,11 @@ export const fetchWeather = createAsyncThunk(
 const weatherSlice = createSlice({
     name: "weather",
     initialState: {
-        selectedCity: { name: "London", lat: 51.5074, lon: -0.1278 },
-        forecast: null,
+        selectedCity: {
+            name: "Bhavnagar",
+            lat: 21.7645,
+            lon: 72.1519,
+        },
         status: "idle",
         error: null,
         unit: "c",
