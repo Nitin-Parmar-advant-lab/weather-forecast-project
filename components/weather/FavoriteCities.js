@@ -10,8 +10,10 @@ export default function FavoriteCities() {
         setIsAdding,
         query,
         setQuery,
+        suggestions,
         error,
         handleAddCity,
+        handleAddSuggestion,
         handleSelectCity,
     } = useFavoriteCities();
 
@@ -34,7 +36,7 @@ export default function FavoriteCities() {
             </div>
 
             {isAdding && (
-                <div className="mb-6 animate-in fade-in slide-in-from-top-4 duration-500">
+                <div className="mb-6 relative z-50 animate-in fade-in slide-in-from-top-4 duration-500">
                     <input
                         autoFocus
                         type="text"
@@ -44,6 +46,25 @@ export default function FavoriteCities() {
                         onChange={(e) => setQuery(e.target.value)}
                         onKeyDown={handleAddCity}
                     />
+                    
+                    {suggestions && suggestions.length > 0 && (
+                        <div className="absolute top-14 left-0 right-0 bg-black/40 backdrop-blur-3xl border border-white/10 rounded-2xl shadow-2xl p-2 animate-in fade-in slide-in-from-top-4 duration-500 overflow-hidden w-full">
+                            <ul className="flex flex-col gap-1 max-h-48 overflow-y-auto no-scrollbar">
+                                {suggestions.map((city) => (
+                                    <li
+                                        key={city.id}
+                                        className="px-4 py-3 sm:py-2.5 hover:bg-white/10 rounded-xl cursor-pointer text-xs sm:text-sm flex justify-between items-center gap-3 transition-colors duration-300 group"
+                                        onClick={() => handleAddSuggestion(city)}
+                                    >
+                                        <span className="font-bold text-indigo-400 truncate flex-1">{city.name}</span>
+                                        <span className="text-[9px] sm:text-[10px] text-white/40 font-black uppercase tracking-wider whitespace-nowrap shrink-0">
+                                            {city.admin1 ? `${city.admin1}, ` : ""}{city.country}
+                                        </span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
                 </div>
             )}
 

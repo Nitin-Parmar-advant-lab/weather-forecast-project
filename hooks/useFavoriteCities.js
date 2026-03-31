@@ -3,12 +3,27 @@
 import { useState } from "react";
 import { getLocationSuggestions } from "@/lib/locationService";
 import useData from "./useData";
+import useLocationSearch from "./useLocationSearch";
 
 export default function useFavoriteCities() {
     const { favorites, updateCity, toggleFavorite } = useData();
     const [isAdding, setIsAdding] = useState(false);
-    const [query, setQuery] = useState("");
+    const { query, setQuery, suggestions, setSuggestions } = useLocationSearch();
     const [error, setError] = useState("");
+
+    const handleSetQuery = (val) => {
+        setQuery(val);
+        if (error) setError("");
+    };
+
+    const handleSetIsAdding = (val) => {
+        setIsAdding(val);
+        if (error) setError("");
+        if (!val) {
+            setQuery("");
+            setSuggestions([]);
+        }
+    };
 
     const handleAddCity = async (e) => {
         if (e.key === "Enter") {
@@ -26,6 +41,7 @@ export default function useFavoriteCities() {
                             country: result.country,
                         });
                         setQuery("");
+                        setSuggestions([]);
                         setIsAdding(false);
                         setError("");
                     } else {
@@ -36,6 +52,19 @@ export default function useFavoriteCities() {
                 }
             }
         }
+    };
+
+    const handleAddSuggestion = (city) => {
+        toggleFavorite({
+            name: city.name,
+            lat: city.latitude,
+            lon: city.longitude,
+            country: city.country,
+        });
+        setQuery("");
+        setSuggestions([]);
+        setIsAdding(false);
+        setError("");
     };
 
     const handleSelectCity = async (city) => {
@@ -68,11 +97,13 @@ export default function useFavoriteCities() {
         favorites,
         toggleFavorite,
         isAdding,
-        setIsAdding,
+        setIsAdding: handleSetIsAdding,
         query,
-        setQuery,
+        setQuery: handleSetQuery,
+        suggestions,
         error,
         handleAddCity,
+        handleAddSuggestion,
         handleSelectCity,
     };
 }

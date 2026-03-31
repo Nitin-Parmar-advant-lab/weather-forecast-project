@@ -1,34 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import searchSvg from "@/public/svgs/search.svg";
 import useData from "@/hooks/useData";
-import { getLocationSuggestions } from "@/lib/locationService";
+import useLocationSearch from "@/hooks/useLocationSearch";
 
 export default function Search() {
-    const [query, setQuery] = useState("");
-    const [suggestions, setSuggestions] = useState([]);
+    const { query, setQuery, suggestions, setSuggestions } = useLocationSearch();
     const { updateCity } = useData();
-
-    useEffect(() => {
-        const fetchSuggestions = async () => {
-            if (query.trim().length < 2) {
-                setSuggestions([]);
-                return;
-            }
-
-            try {
-                const results = await getLocationSuggestions(query);
-                setSuggestions(results);
-            } catch (err) {
-                setSuggestions([]);
-            }
-        };
-
-        const timer = setTimeout(fetchSuggestions, 500);
-        return () => clearTimeout(timer);
-    }, [query]);
 
     const handleSelectCity = (city) => {
         updateCity({

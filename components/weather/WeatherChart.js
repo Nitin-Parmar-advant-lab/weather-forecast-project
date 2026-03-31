@@ -70,7 +70,7 @@ export default function WeatherChart() {
                 </div>
             </div>
 
-            <div className="flex-1 min-h-[180px] w-full mt-2">
+            <div className="flex-1 min-h-45 w-full mt-2">
                 <ResponsiveContainer width="100%" height="100%" minHeight={180}>
                     <AreaChart data={chartData} margin={{ bottom: 15 }}>
                         <defs>

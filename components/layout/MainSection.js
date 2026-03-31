@@ -55,7 +55,7 @@ export default function MainSection() {
                 </div>
 
                 <div className="col-span-12 lg:col-span-8 flex flex-col gap-4 sm:gap-6 min-h-0">
-                    <div className="flex-none lg:flex-3 h-[300px] lg:h-auto min-h-0">
+                    <div className="flex-none lg:flex-3 h-75 lg:h-auto min-h-0">
                         <WeatherChart />
                     </div>
                     <div className="flex-none sm:flex-1.5 min-h-0">
